@@ -16,6 +16,7 @@ public static class FunctionsAppExtensionMethods
         builder.AddJsonFile(Path.Combine(context.ApplicationRootPath, $"appsettings.{context.EnvironmentName}.json"), optional: true, reloadOnChange: false);
         return builder;
     }
+
     /// <summary>
     /// Adds the <see cref="HealthCheckService"/> to the container, using the provided delegate to register
     /// health checks.

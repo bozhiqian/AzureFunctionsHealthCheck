@@ -1,35 +1,30 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace DreamCloud.Functions.HealthCheck
+namespace DreamCloud.Functions.HealthCheck;
+
+internal class HealthChecksBuilder : IHealthChecksBuilder
 {
-    internal class HealthChecksBuilder : IHealthChecksBuilder
+    public HealthChecksBuilder(IServiceCollection services)
     {
-        public HealthChecksBuilder(IServiceCollection services)
+        Services = services;
+    }
+
+    public IServiceCollection Services { get; }
+
+    public IHealthChecksBuilder Add(HealthCheckRegistration registration)
+    {
+        if (registration == null)
         {
-            Services = services;
+            throw new ArgumentNullException(nameof(registration));
         }
 
-        public IServiceCollection Services { get; }
-
-        public IHealthChecksBuilder Add(HealthCheckRegistration registration)
+        Services.Configure<HealthCheckServiceOptions>(options =>
         {
-            if (registration == null)
-            {
-                throw new ArgumentNullException(nameof(registration));
-            }
+            options.Registrations.Add(registration);
+        });
 
-            Services.Configure<HealthCheckServiceOptions>(options =>
-            {
-                options.Registrations.Add(registration);
-            });
-
-            return this;
-        }
+        return this;
     }
 }
